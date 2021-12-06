@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS mailing;
 USE mailing;
 CREATE TABLE IF NOT EXISTS mailing (
-	first_name VARCHAR(20),
+    first_name VARCHAR(20),
     last_name VARCHAR(30),
     email VARCHAR(50),
     address VARCHAR(150),
@@ -27,7 +27,7 @@ INSERT INTO mailing (first_name, last_name, email, address, zip_code)
         ('John', 'Clark', 'johnclark@example.com', 'Ancol', 14430);
         
 SELECT
-	mailing.first_name,
+    mailing.first_name,
     mailing.last_name,
     mailing.address,
     mailing.zip_code,
