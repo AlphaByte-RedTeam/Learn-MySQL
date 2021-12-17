@@ -14,12 +14,12 @@ CREATE TABLE pegawai (
 );
 
 CREATE TABLE tingkat_member (
-	kode_tingkat VARCHAR(10) PRIMARY KEY NOT NULL,
+    kode_tingkat VARCHAR(10) PRIMARY KEY NOT NULL,
     nama_tingkat VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE pelanggan (
-	no_pelanggan VARCHAR(10) PRIMARY KEY NOT NULL,
+    no_pelanggan VARCHAR(10) PRIMARY KEY NOT NULL,
     nama_pelanggan VARCHAR(20) NOT NULL,
     ttl_pelanggan DATE NOT NULL,
     email_pelanggan VARCHAR(20) NOT NULL,
@@ -32,14 +32,14 @@ CREATE TABLE pelanggan (
 );
 
 CREATE TABLE bunga(
-	kd_bunga VARCHAR(10) PRIMARY KEY NOT NULL,
+    kd_bunga VARCHAR(10) PRIMARY KEY NOT NULL,
     nama_bunga VARCHAR (20) NOT NULL,
     stok_bunga INT NOT NULL,
     harga_bunga INT NOT NULL
 );
 
 CREATE TABLE pesanan(
-	no_pesanan VARCHAR(10) PRIMARY KEY NOT NULL,
+    no_pesanan VARCHAR(10) PRIMARY KEY NOT NULL,
     no_pelanggan VARCHAR(10),
     kd_bunga VARCHAR(10),
     jumlah_pesanan INT NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE pesanan(
 );
 
 CREATE TABLE transaksi(
-	no_transaksi VARCHAR(10) PRIMARY KEY NOT NULL,
+    no_transaksi VARCHAR(10) PRIMARY KEY NOT NULL,
     id_pegawai VARCHAR(10),
     no_pesanan VARCHAR(10),
     total_harga INT NOT NULL,
