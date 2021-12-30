@@ -255,3 +255,119 @@ SELECT * FROM transaksi WHERE total_bayar IN(100000, 200000);
 # menggunakan between
 # Statement BETWEEN berarti menampilkan range data dari 100000 sampai 200000
 SELECT * FROM transaksi WHERE total_bayar BETWEEN 100000 AND 200000;
+
+# inner join
+# no pesanan, nama pelanggan, nama bunga
+# SELECT namaCol1, ... FROM TABLE a JOIN TABLE b IN tableA.column fk = tableB.column pk
+SELECT pesanan.no_pesanan, pelanggan.nama_pelanggan, bunga.nama_bunga FROM pesanan
+    INNER JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan
+    INNER JOIN bunga ON pesanan.kd_bunga = bunga.kd_bunga;
+
+SELECT pesanan.no_pesanan, pelanggan.nama_pelanggan, bunga.nama_bunga FROM pesanan, pelanggan, bunga
+    WHERE pesanan.no_pelanggan = pelanggan.no_pelanggan AND pesanan.kd_bunga = bunga.kd_bunga;
+
+# join beberapa table
+SELECT transaksi.no_transaksi, pegawai.nama_pegawai, pesanan.no_pesanan, pelanggan.nama_pelanggan, bunga.nama_bunga FROM transaksi
+    JOIN pegawai ON transaksi.id_pegawai = pegawai.id_pegawai
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan
+    JOIN bunga ON pesanan.kd_bunga = bunga.kd_bunga;
+
+INSERT INTO pegawai VALUES ('pgw-12', 'bambang', '1990-10-09', 'jalan eternal', '081221112521', 'drui@gmail.com');
+
+# inner join
+SELECT pelanggan.nama_pelanggan, transaksi.no_transaksi FROM transaksi
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    INNER JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan;
+
+# left join
+SELECT pelanggan.nama_pelanggan, transaksi.no_transaksi FROM transaksi
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    INNER JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan;
+
+# right join
+SELECT pelanggan.nama_pelanggan, transaksi.no_transaksi FROM transaksi
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    RIGHT JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan;
+
+# union
+SELECT id_pegawai FROM pegawai
+UNION
+SELECT total_harga FROM transaksi
+UNION
+SELECT no_pesanan FROM pesanan
+UNION
+SELECT nama_pelanggan FROM pelanggan;
+
+# union all
+SELECT id_pegawai, nama_pegawai AS nama FROM pegawai
+UNION ALL
+SELECT no_pelanggan nama_pelanggan FROM pelanggan;
+
+# operator like
+SELECT * FROM pegawai
+WHERE nama_pegawai LIKE '%an%';
+
+SELECT transaksi.no_transaksi, pegawai.nama_pegawai, pesanan.no_pesanan, pelanggan.nama_pelanggan, bunga.nama_bunga FROM transaksi
+    JOIN pegawai ON transaksi.id_pegawai = pegawai.id_pegawai
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan
+    JOIN bunga ON pesanan.kd_bunga = bunga.kd_bunga
+WHERE pegawai.nama_pegawai NOT LIKE 'baby%';
+
+# ganjil genap
+# ini genap
+SELECT * FROM transaksi;
+SELECT transaksi.no_transaksi, pegawai.nama_pegawai, pesanan.no_pesanan, pelanggan.nama_pelanggan, bunga.nama_bunga FROM transaksi
+    JOIN pegawai ON transaksi.id_pegawai = pegawai.id_pegawai
+    JOIN pesanan ON transaksi.no_pesanan = pesanan.no_pesanan
+    JOIN pelanggan ON pesanan.no_pelanggan = pelanggan.no_pelanggan
+    JOIN bunga ON pesanan.kd_bunga = bunga.kd_bunga
+WHERE MOD(SUBSTRING(transaksi.no_transaksi, 7), 2) = 0;
+
+# ini ganjil
+DESC pegawai;
+SELECT * FROM pegawai;
+# YYYY MM DD
+
+SELECT * FROM pegawai WHERE MOD(date_format(ttl_pegawai, '%Y'), 2) = 1;
+
+# tampilkan vokal / bukan vokal
+# tampilkan nama pegawai yang diakhiri bukan dengan huruf vokal
+SELECT * FROM pegawai WHERE SUBSTRING(nama_pegawai, -1) NOT IN('A', 'I', 'U', 'E', 'O');
+
+# tampilkan nama pegawai yang huruf ke 2 adalah huruf vokal
+SELECT * FROM pegawai WHERE SUBSTRING(nama_pegawai, 2, 1) IN('A', 'I', 'U', 'E', 'O');
+
+# atau
+# NOT RECOMMENDED
+SELECT * FROM pegawai WHERE nama_pegawai NOT LIKE '%a' OR '%i' OR '%u' OR '%e' OR '%o';
+SELECT * FROM pegawai WHERE nama_pegawai LIKE '_a%' OR '_i%' OR '_u%' OR '_e%' OR '_o%';
+
+# rata-rata subquery tunggal
+SELECT * FROM bunga;
+# tampilkan data bunga yang harga bunganya dibawah nilai max harga bunga dari rata-rata bunga
+SELECT * FROM bunga WHERE harga_bunga < (SELECT MAX(harga_bunga) FROM bunga WHERE harga_bunga < 90000);
+
+SELECT MAX(harga_bunga) FROM bunga;
+SELECT AVG(harga_bunga) FROM bunga;
+SELECT MAX(harga_bunga) FROM bunga WHERE harga_bunga < (SELECT AVG(harga_bunga) FROM bunga);
+
+# subquery ganda
+SELECT * FROM transaksi;
+SELECT MAX(total_harga) FROM transaksi;
+SELECT AVG(total_bayar) FROM transaksi;
+
+SELECT * FROM transaksi
+WHERE total_harga = (SELECT MAX(total_harga) FROM transaksi WHERE total_harga > (SELECT AVG(total_bayar) FROM transaksi));
+
+SELECT * FROM transaksi
+WHERE total_bayar < (SELECT AVG(total_bayar) FROM transaksi WHERE total_harga = (SELECT MAX(total_harga) FROM transaksi));
+
+SELECT AVG(total_bayar) FROM transaksi WHERE total_harga = (SELECT MAX(total_harga) FROM transaksi);
+
+# operator IN = memunculkan data pasti sesuai yang diminta
+SELECT * FROM transaksi WHERE total_bayar IN(100000, 200000);
+
+# operator BETWEEN = memunculkan data antara kondisi yang diminta
+SELECT * FROM transaksi WHERE total_bayar BETWEEN 100000 AND 200000;
